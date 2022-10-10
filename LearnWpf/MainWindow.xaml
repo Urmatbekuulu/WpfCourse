@@ -7,10 +7,9 @@
         xmlns:customMarkupExtentsions="clr-namespace:LearnXAML.CustomMarkupExtentsions"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ListBox Height="200" HorizontalAlignment="Left" 
-                 Margin="94,56,0,0" Name="textBox1" 
-                 VerticalAlignment="Top" Width="200" ItemsSource="{customMarkupExtentsions:CurrentWeekDays StartDayOfWeek=Sunday}"/>
-
-    </Grid>
+        <Grid>
+                <Button x:Name="ClickButton" 
+                        Click="ButtonClicked"
+                        Template="{DynamicResource buttontemplate}"/>
+        </Grid>
 </Window>
