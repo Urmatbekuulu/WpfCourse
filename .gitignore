@@ -1,4 +1,7 @@
 .idea/
 
-LearnWpf/[Bb]in/
+
 LearnWpf/[Oo]bj/
+LearnWpf/obj
+LearnWpf/[Bb]in/
+LearnWpf/bin
