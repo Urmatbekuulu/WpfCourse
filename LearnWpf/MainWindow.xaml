@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="350">
+        Title="{Binding ElementName=titleEditor,Path=Text}" Height="350" Width="350">
     <Grid>
         <StackPanel>
             <Label Content="Text Box"/>
@@ -13,6 +13,13 @@
             <Label Content="TextBlock"/>
             <TextBlock  Text="{Binding ElementName=textBox,Path=Text}"/>
             <CheckBox FlowDirection="LeftToRight" Content="Disable editing" Name="checkBox"/>
+            <!-- Implementing SelfBinding task2 -->
+            <Border Background="Bisque" Height="60" Width="{Binding RelativeSource={RelativeSource Self},Path=Height}">
+                <TextBlock>SelfBinding</TextBlock>
+            </Border>
+            <!-- Implementing task3 -->
+            <Label Content="Title Editing"/>
+            <TextBox Name="titleEditor"/>
         </StackPanel>
     </Grid>
 </Window>
