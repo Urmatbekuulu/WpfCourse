@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
+        xmlns:customConverters="clr-namespace:LearnXAML.CustomConverters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <customConverters:ForegroundToBackgroundConverter x:Key="CustomConverter"/>
+    </Window.Resources>
     <Grid>
+        <StackPanel>
+            <TextBlock Foreground="DarkGray" Background="{Binding RelativeSource={RelativeSource Self},Path=Foreground,Converter={StaticResource CustomConverter}}">This is text block</TextBlock>
 
+        </StackPanel>
     </Grid>
 </Window>
