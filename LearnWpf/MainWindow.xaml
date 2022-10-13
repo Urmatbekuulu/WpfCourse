@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="350" Width="350">
     <Grid>
-
+        <StackPanel>
+            <Label Content="Text Box"/>
+            <TextBox Name="textBox" IsReadOnly="{Binding ElementName=checkBox,Path=IsChecked}"/>
+            <Label Content="TextBlock"/>
+            <TextBlock  Text="{Binding ElementName=textBox,Path=Text}"/>
+            <CheckBox FlowDirection="LeftToRight" Content="Disable editing" Name="checkBox"/>
+        </StackPanel>
     </Grid>
 </Window>
