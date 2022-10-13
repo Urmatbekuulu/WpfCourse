@@ -9,11 +9,22 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <customConverters:ForegroundToBackgroundConverter x:Key="CustomConverter"/>
+        <customConverters:SumConverter x:Key="SumConverter"/>
     </Window.Resources>
     <Grid>
         <StackPanel>
             <TextBlock Foreground="DarkGray" Background="{Binding RelativeSource={RelativeSource Self},Path=Foreground,Converter={StaticResource CustomConverter}}">This is text block</TextBlock>
-
+            <TextBox Name="textBox1" Text="2"/>
+            <TextBox Name="textBox2"/>
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding
+                        Converter="{StaticResource SumConverter}">
+                        <Binding Path="Text" ElementName="textBox1"/>
+                        <Binding Path="Text" ElementName="textBox2"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>
