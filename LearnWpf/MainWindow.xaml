@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
-        Title="{Binding ElementName=titleEditor,Path=Text}" Height="350" Width="350">
+       
+        Height="350" Width="350">
     <Grid>
         <StackPanel>
+            <!-- Implementing SelfBinding task1 -->
             <Label Content="Text Box"/>
-            <TextBox Name="textBox" IsReadOnly="{Binding ElementName=checkBox,Path=IsChecked}"/>
+            <TextBox Name="textBox"/>
             <Label Content="TextBlock"/>
-            <TextBlock  Text="{Binding ElementName=textBox,Path=Text}"/>
-            <CheckBox FlowDirection="LeftToRight" Content="Disable editing" Name="checkBox"/>
+            <TextBlock  Name="textBlcok"/>
+            <CheckBox Content="Disable editing" Name="checkBox"/>
             <!-- Implementing SelfBinding task2 -->
-            <Border Background="Bisque" Height="60" Width="{Binding RelativeSource={RelativeSource Self},Path=Height}">
+            <Border Name="border" Background="Bisque" Width="60" >
                 <TextBlock>SelfBinding</TextBlock>
             </Border>
             <!-- Implementing task3 -->
