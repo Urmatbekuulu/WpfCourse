@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+    <StackPanel PreviewKeyDown="UIElement_OnPreviewKeyDown">
+        <TextBox Name="textBox1"/>
+        <TextBox Name="textBox2"/>
+        <TextBlock Text="{Binding ElementName=slider,Path=Value}"/>
+        <Slider Name="slider" Maximum="1000" TickFrequency="1" IsSnapToTickEnabled="True" />
+    </StackPanel>
 </Window>
