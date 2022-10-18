@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace LearnXAML {
     /// <summary>
@@ -20,6 +10,45 @@ namespace LearnXAML {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private static bool showPopupInLogicalTree = false;
+
+        private void ExaminVisalTreeClicked(object sender, RoutedEventArgs e) {
+            listBox.Items.Clear(); 
+            PrintVisualTree(this.mainWindow);
+        }
+
+        private void ExamineLogicalTreeClicked(object sender, RoutedEventArgs e) {
+           listBox.Items.Clear();
+            PrintLogicalTree(this);
+        }
+        public void PrintVisualTree(Visual visual)
+        {
+            listBox.Items.Add(visual.GetType().ToString()) ;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visual); i++)
+            {
+                PrintVisualTree((Visual)VisualTreeHelper.GetChild(visual, i));
+            }
+        }
+        public void PrintLogicalTree(object logicalTree)
+        {
+            var control = logicalTree as FrameworkElement;
+            if (control == null || (logicalTree is Popup) && !showPopupInLogicalTree) return;
+            
+            listBox.Items.Add(logicalTree.GetType().ToString()) ;
+            if(control==listBox) return;
+            foreach (var current in LogicalTreeHelper.GetChildren(control)) {
+                
+                PrintLogicalTree(current);
+            } 
+        }
+        
+        private void VisibilityControlOfPopup(object sender, RoutedEventArgs e) {
+            showPopupInLogicalTree = !showPopupInLogicalTree;
+            listBox.Items.Clear();
+            PrintLogicalTree(this);
         }
     }
 }
