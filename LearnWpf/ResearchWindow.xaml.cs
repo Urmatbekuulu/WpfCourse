@@ -7,7 +7,7 @@ namespace LearnXAML;
 
 public partial class ResearchWindow : Window {
     private object? HoveredSource { get; set; }
-    public event Action<object, MouseEventArgs> ElementHovered;
+    public event Action<object, MouseEventArgs>? ElementHovered;
     public ResearchWindow() {
         InitializeComponent();
     }
@@ -15,6 +15,6 @@ public partial class ResearchWindow : Window {
         if(e.OriginalSource.Equals(HoveredSource)) return;
         HoveredSource = e.OriginalSource;
         //Debugger.Log(0,null,$"\nSource: {e.OriginalSource}");
-        ElementHovered.Invoke(sender,e);
+        ElementHovered?.Invoke(sender,e);
     }
 }

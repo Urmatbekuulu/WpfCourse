@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,7 +10,6 @@ namespace LearnXAML {
     /// </summary>
     public partial class MainWindow : Window {
         private ResearchWindow ResearchWindow { get; set; }
-        public DependencyObject? OriginalSource { get; set; }
         public MainWindow() {
             InitializeComponent();
             InitializeTreeView();
@@ -20,40 +18,47 @@ namespace LearnXAML {
         private void InitializeTreeView() {
             ResearchWindow = new ResearchWindow();
             ResearchWindow.Show();
-            var treeViewItem = CreateNode(ResearchWindow);
-            treeView.Items.Add(treeViewItem);
-            TreeViewItem viewItem =(TreeViewItem)treeView.Items[0];
-            FillTreeView(VisualTreeHelper.GetChild(ResearchWindow,0),viewItem);
+            
+            var newTreeViewItem = NewTreeViewItem(ResearchWindow);
+            treeView.Items.Add(newTreeViewItem);
+            
+            FillTreeView(VisualTreeHelper.GetChild(ResearchWindow,0),(TreeViewItem)treeView.Items[0]);
         }
         private void FillTreeView(DependencyObject? element,TreeViewItem? itemCollection) {
            
             if(element is null || itemCollection is null) return;
-            var treeViewItem = CreateNode(element);
-            itemCollection.Items.Add(treeViewItem);
-            var item = itemCollection.Items.GetItemAt(itemCollection.Items.Count - 1);
+            
+            var newTreeViewItem = NewTreeViewItem(element);
+            itemCollection.Items.Add(newTreeViewItem);
+            var items = itemCollection.Items.GetItemAt(itemCollection.Items.Count - 1);
+            
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element);i++) {
-                FillTreeView(VisualTreeHelper.GetChild(element,i),(TreeViewItem)item);
+                FillTreeView(VisualTreeHelper.GetChild(element,i),(TreeViewItem)items);
             }
         }
         private void ElementHoveredHandler(object sender,MouseEventArgs e) {
             if(!Keyboard.IsKeyDown(Key.LeftCtrl) || !Keyboard.IsKeyDown(Key.LeftShift)) return;
-            OriginalSource = (e.OriginalSource as DependencyObject);
-            if (OriginalSource is null) return; 
-            FindAndSelectOriginalSource(treeView.Items[0] as TreeViewItem);
+            
+            var originalSource = (e.OriginalSource as DependencyObject);
+            if (originalSource is null) return; 
+            
+            FindAndSelectOriginalSource(treeView.Items[0] as TreeViewItem,originalSource);
         }
-        private void FindAndSelectOriginalSource(TreeViewItem? item) {
+        private void FindAndSelectOriginalSource(TreeViewItem? item,DependencyObject originalSource) {
            if(item is null) return;
            item.IsExpanded = true;
-           if (item.Tag.Equals(OriginalSource)) {
+           
+           if (item.Tag.Equals(originalSource)) {
                item.Focus();
                item.IsSelected = true;
                return;
            }
+           
            foreach (var element in item.Items) {
-               FindAndSelectOriginalSource(element as TreeViewItem);
+               FindAndSelectOriginalSource(element as TreeViewItem,originalSource);
            }
         }
-        private TreeViewItem CreateNode(DependencyObject? element) {
+        private TreeViewItem NewTreeViewItem(DependencyObject? element) {
             var name = (element as FrameworkElement)?.Name;
             return new TreeViewItem() {
                 Header = $"Node type is {element?.GetType()} " +
