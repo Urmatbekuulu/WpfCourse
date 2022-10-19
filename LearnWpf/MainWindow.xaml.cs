@@ -9,16 +9,16 @@ namespace LearnXAML {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private ResearchWindow ResearchWindow { get; set; }
+        private ResearchWindow? ResearchWindow { get; set; }
         public MainWindow() {
             InitializeComponent();
             InitializeTreeView();
-            if (ResearchWindow != null) ResearchWindow.ElementHovered += ElementHoveredHandler;
         } 
         private void InitializeTreeView() {
             ResearchWindow = new ResearchWindow();
             ResearchWindow.Show();
-            
+            ResearchWindow.ElementHovered += ElementHoveredHandler;
+
             var newTreeViewItem = NewTreeViewItem(ResearchWindow);
             treeView.Items.Add(newTreeViewItem);
             
@@ -68,7 +68,7 @@ namespace LearnXAML {
         }
         protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
-            ResearchWindow.Close();
+            ResearchWindow?.Close();
         }
     }
 }

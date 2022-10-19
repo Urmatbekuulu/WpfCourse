@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
 namespace LearnXAML; 
-
 public partial class ResearchWindow : Window {
     private object? HoveredSource { get; set; }
     public event Action<object, MouseEventArgs>? ElementHovered;
