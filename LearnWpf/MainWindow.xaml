@@ -16,7 +16,7 @@
         <StackPanel>
             <Button Click="ExaminVisalTreeClicked" Content="Examine Visual Tree"/>
             <Button Click="ExamineLogicalTreeClicked" Content="Examine Logical Tree"/>
-            <Button Click="VisibilityControlOfPopup" Content="Show/Hide"/>
+            <Button Click="HideShowPopup" Content="Show/Hide"/>
             <local:NewUserControl/>
         </StackPanel>
         <ListBox Name="listBox" Grid.Row="1"/>

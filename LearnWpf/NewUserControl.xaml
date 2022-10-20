@@ -11,13 +11,12 @@
                 
     <Grid>
         <TextBlock Text="Text" Name="textBlock"/>
-            <Popup
-                IsOpen = "True"    
-                PlacementTarget = "{Binding ElementName = textBlock}"
-                Placement="MousePoint"
-                AllowsTransparency="True"
+        <!-- IsOpen="{Binding ElementName=textBlock,Path=IsMouseOver,Mode=OneWay}" -->
+        <Popup
                 PopupAnimation = "Slide"
                 ClipToBounds="False"
+                AllowsTransparency="True"
+                Placement="Bottom"
                 >
                 <StackPanel>
                     <Border>

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Xml;
 
 
 namespace LearnXAML {
@@ -11,9 +12,7 @@ namespace LearnXAML {
         public MainWindow() {
             InitializeComponent();
         }
-
-        private static bool showPopupInLogicalTree = false;
-
+        
         private void ExaminVisalTreeClicked(object sender, RoutedEventArgs e) {
             listBox.Items.Clear(); 
             PrintVisualTree(this.mainWindow);
@@ -25,8 +24,7 @@ namespace LearnXAML {
         }
         public void PrintVisualTree(Visual visual)
         {
-            listBox.Items.Add(visual.GetType().ToString()) ;
-
+            listBox.Items.Add(visual.GetType().ToString());
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visual); i++)
             {
                 PrintVisualTree((Visual)VisualTreeHelper.GetChild(visual, i));
@@ -35,7 +33,7 @@ namespace LearnXAML {
         public void PrintLogicalTree(object logicalTree)
         {
             var control = logicalTree as FrameworkElement;
-            if (control == null || (logicalTree is Popup) && !showPopupInLogicalTree) return;
+            if (control == null) return;
             
             listBox.Items.Add(logicalTree.GetType().ToString()) ;
             if(control==listBox) return;
@@ -45,10 +43,21 @@ namespace LearnXAML {
             } 
         }
         
-        private void VisibilityControlOfPopup(object sender, RoutedEventArgs e) {
-            showPopupInLogicalTree = !showPopupInLogicalTree;
-            listBox.Items.Clear();
-            PrintLogicalTree(this);
+        private void HideShowPopup(object sender, RoutedEventArgs e) {
+            FindPopupAndChangeVisibility(this.mainWindow);
+        }
+
+        private void FindPopupAndChangeVisibility(Visual? visual) {
+            if(visual is null) return;
+            var popup = visual as Popup;
+            if (popup is not null) {
+                popup.IsOpen = !popup.IsOpen;
+                return;
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visual); i++)
+            {
+                FindPopupAndChangeVisibility((Visual)VisualTreeHelper.GetChild(visual, i));
+            }
         }
     }
 }
