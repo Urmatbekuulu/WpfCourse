@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ namespace LearnXAML {
     /// </summary>
     public partial class MainWindow : Window {
         private ResearchWindow? ResearchWindow { get; set; }
+        private int TreeLevel { get; set; }
         public MainWindow() {
             InitializeComponent();
             InitializeTreeView();
@@ -19,21 +21,22 @@ namespace LearnXAML {
             ResearchWindow.Show();
             ResearchWindow.ElementHovered += ElementHoveredHandler;
 
-            var newTreeViewItem = NewTreeViewItem(ResearchWindow);
+            var newTreeViewItem = NewTreeViewItem(ResearchWindow,TreeLevel);
             treeView.Items.Add(newTreeViewItem);
             
-            FillTreeView(VisualTreeHelper.GetChild(ResearchWindow,0),(TreeViewItem)treeView.Items[0]);
+            FillTreeView(VisualTreeHelper.GetChild(ResearchWindow,0),(TreeViewItem)treeView.Items[0],0);
         }
-        private void FillTreeView(DependencyObject? element,TreeViewItem? itemCollection) {
-           
-            if(element is null || itemCollection is null) return;
-            
-            var newTreeViewItem = NewTreeViewItem(element);
+        private void FillTreeView(DependencyObject? element,TreeViewItem? itemCollection,int treeLevel) {
+
+            if (element is null || itemCollection is null) {
+                return;
+            }
+            var newTreeViewItem = NewTreeViewItem(element,treeLevel+1);
             itemCollection.Items.Add(newTreeViewItem);
             var items = itemCollection.Items.GetItemAt(itemCollection.Items.Count - 1);
-            
+            var visualWrapper =(VisualItemWrapper)((TreeViewItem)items).Header;
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element);i++) {
-                FillTreeView(VisualTreeHelper.GetChild(element,i),(TreeViewItem)items);
+                FillTreeView(VisualTreeHelper.GetChild(element,i),(TreeViewItem)items,visualWrapper.TreeLevel);
             }
         }
         private void ElementHoveredHandler(object sender,MouseEventArgs e) {
@@ -58,11 +61,17 @@ namespace LearnXAML {
                FindAndSelectOriginalSource(element as TreeViewItem,originalSource);
            }
         }
-        private TreeViewItem NewTreeViewItem(DependencyObject? element) {
+        private TreeViewItem NewTreeViewItem(DependencyObject? element,int treeLevel) {
             var name = (element as FrameworkElement)?.Name;
+
+            var wrapperObject = new VisualItemWrapper() {
+                VisualElementName = name,
+                VisualElementType = element?.GetType(),
+                TreeLevel = treeLevel
+            };
+            
             return new TreeViewItem() {
-                Header = $"Node type is {element?.GetType()} " +
-                         $"{(string.IsNullOrEmpty(name) ? "" : ": Node name is " + name)}",
+                Header = wrapperObject,
                 Tag = element
             };
         }
@@ -70,5 +79,11 @@ namespace LearnXAML {
             base.OnClosing(e);
             ResearchWindow?.Close();
         }
+    }
+
+    public class VisualItemWrapper {
+        public Type VisualElementType { get; set; }
+        public string VisualElementName { get; set; }
+        public int TreeLevel { get; set; }
     }
 }

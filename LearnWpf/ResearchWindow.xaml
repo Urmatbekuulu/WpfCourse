@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
         Title="ResearchWindow" Height="450" Width="800">
-    <Grid PreviewMouseMove="UIElement_OnPreviewMouseMove">
+    <Grid PreviewMouseMove="UIElement_OnPreviewMouseMove" Name="TestName">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -15,7 +15,7 @@
         <TextBox  Text="Test"/>
         <TextBox Grid.Row="1" Text="Second Test"/>
         <StackPanel Grid.Row="2">
-            <Button Content="TestButton"/>
+            <Button Content="TestButton" Name="ButtonsTestName"/>
         </StackPanel>
     </Grid>
 </Window>

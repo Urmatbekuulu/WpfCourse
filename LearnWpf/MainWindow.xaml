@@ -3,10 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local = "clr-namespace:LearnXAML"
         mc:Ignorable="d"
         Height="600"
         Width="600"
         Title="MainWindow" MinWidth="250">
+        <Window.Resources>
+                <DataTemplate DataType="{x:Type local:VisualItemWrapper}">
+                        <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=TreeLevel, StringFormat={}[ {0} ]__}"/>
+                                <TextBlock Text="{Binding Path=VisualElementType}"/>
+                                <TextBlock Text="{Binding Path=VisualElementName, StringFormat={}__{0}__}"/>
+                        </StackPanel>
+                </DataTemplate>
+        </Window.Resources>
         <Grid>
                 <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -27,7 +37,7 @@
                                 </Button>
                         </Grid>
                         <TreeView Name="treeView"  VerticalAlignment="Stretch">
-                                
+                               
                         </TreeView>
                 </DockPanel>
                 <GridSplitter  
