@@ -18,8 +18,15 @@ namespace LearnXAML {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        public List<string> list { get; set; }= new List<string>();
         public MainWindow() {
             InitializeComponent();
+            list.Add("A");
+            list.Add("B");
+            list.Add("C");
+            list.Add("D");
+            list.Add("E");
+            this.DataContext = this;
         }
     }
 }
