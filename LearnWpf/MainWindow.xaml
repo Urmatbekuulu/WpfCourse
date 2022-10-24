@@ -7,6 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <ContentControl>
+            <ContentControl.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <DockPanel Height="Auto">
+                            <TextBlock Text="{TemplateBinding Content}" DockPanel.Dock="Left"/>
+                            <Button Content="Close" DockPanel.Dock="Right"/>
+                            <Button Content="Maximize" DockPanel.Dock="Right"/>
+                            <Button Content="Minimize" HorizontalAlignment="Right" DockPanel.Dock="Right"/>
+                        </DockPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+            <ContentControl.Content>
+                <Binding Path="Title" RelativeSource="{RelativeSource AncestorType=Window}"/>
+            </ContentControl.Content>
+        </ContentControl>
     </Grid>
 </Window>
