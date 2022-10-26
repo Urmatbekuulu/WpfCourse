@@ -11,46 +11,151 @@
         </Style>
         <local:DebugConverter x:Key="DebugConverter"/>
         <local:AgeToColorConverter x:Key="AgeToColorConverter"/>
+        <Style x:Key="AgeValidateByExceptionStyle" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}
+                    ,Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="MinHeight" Value="25"/>
+                    <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="true">
+                                   <AdornedElementPlaceholder Name="customAdorner"
+                                                               VerticalAlignment="Center">
+                                        <Border BorderBrush="Red"
+                                                BorderThickness="1">
+                                            <Border Background="Red"
+                                                    DockPanel.Dock="right"
+                                                    Margin="5,0,0,0"
+                                                    Width="20"
+                                                    Height="20"
+                                                    CornerRadius="10"
+                                                    HorizontalAlignment="Right"
+                                                    ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                                <TextBlock Text="!"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           FontWeight="Bold"
+                                                           Foreground="White">
+                                                </TextBlock>
+                                            </Border>
+                                        </Border>
+                                        
+                                    </AdornedElementPlaceholder>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ValidateByDataErrorStyle" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}
+                    ,Path=(Validation.Errors)[0].ErrorContent }"/>
+                    <Setter Property="MinHeight" Value="25"/>
+                    <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="true">
+                                   <AdornedElementPlaceholder Name="customAdorner"
+                                                               VerticalAlignment="Center">
+                                        <Border BorderBrush="Red"
+                                                BorderThickness="1">
+                                            <Border Background="Red"
+                                                    DockPanel.Dock="right"
+                                                    Margin="5,0,0,0"
+                                                    Width="20"
+                                                    Height="20"
+                                                    CornerRadius="10"
+                                                    HorizontalAlignment="Right"
+                                                    ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                                <TextBlock Text="!"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           FontWeight="Bold"
+                                                           Foreground="White">
+                                                </TextBlock>
+                                            </Border>
+                                        </Border>
+                                        
+                                    </AdornedElementPlaceholder>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ValidateByNotifyDataErrorStyle" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}
+                            ,Path=(Validation.Errors)[0].ErrorContent}"/>
+                  <Setter Property="MinHeight" Value="25"/>
+                    <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="true">
+                                   <AdornedElementPlaceholder Name="customAdorner"
+                                                               VerticalAlignment="Center">
+                                        <Border BorderBrush="Red"
+                                                BorderThickness="1">
+                                            <Border Background="Red"
+                                                    DockPanel.Dock="right"
+                                                    Margin="5,0,0,0"
+                                                    Width="20"
+                                                    Height="20"
+                                                    CornerRadius="10"
+                                                    HorizontalAlignment="Right"
+                                                    ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                                <TextBlock Text="!"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           FontWeight="Bold"
+                                                           Foreground="White">
+                                                </TextBlock>
+                                            </Border>
+                                        </Border>
+                                        
+                                    </AdornedElementPlaceholder>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="Aqua">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Path=People}" Name="listBox">
+        <ListBox ItemsSource="{Binding Path=People}" Name="listBox" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Focusable="True">
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Age,Converter={StaticResource AgeToColorConverter}}" Value="True">
-                                        <Setter Property="Background" Value="Green"/>
-                                    </DataTrigger>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                    </Trigger>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="Background" Value="Green"/>
-                                            <Condition Property="IsMouseOver" Value="True"/>
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Height" Value="100"/>
-                                    </MultiTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <Label Content="{Binding Path=FirstName }"/>
-                        <Label Content="{Binding Path=LastName}"/>
-                        <Label Content="{Binding Path=Age}"/>
-                    </StackPanel>
+                    <UniformGrid Rows="1" HorizontalAlignment="Stretch" GotFocus="UIElement_OnGotFocus">
+                        <TextBox Text="{Binding Path=FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Style="{StaticResource ValidateByDataErrorStyle}"/>
+                        <TextBox Text="{Binding Path=LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                 Style="{StaticResource ValidateByNotifyDataErrorStyle}"/>
+                        <TextBox Text="{Binding Path=Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                                 Style="{StaticResource AgeValidateByExceptionStyle}"/>
+                    </UniformGrid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <UniformGrid Grid.Row="1" Rows="1">
-            <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.LastName, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.Age, UpdateSourceTrigger=PropertyChanged}"/>
+        <UniformGrid Grid.Row="1" Rows="1" Margin="10">
+            <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource ValidateByDataErrorStyle}"/>
+            <TextBox Text="{Binding ElementName=listBox, Path=SelectedItem.LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                     Style="{StaticResource ValidateByNotifyDataErrorStyle}"/>
+            <TextBox Text="{Binding ElementName=listBox, Path=SelectedItem.Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                     Style="{StaticResource AgeValidateByExceptionStyle}"/>
         </UniformGrid>
     </Grid> 
 </Window>
