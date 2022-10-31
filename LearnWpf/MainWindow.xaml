@@ -6,7 +6,18 @@
         mc:Ignorable="d"
         Height="600"
         Width="600"
+        xmlns:local = "clr-namespace:LearnXAML"
         Title="MainWindow" MinWidth="250">
+        <Window.Resources>
+                <Style x:Key="ItemHighlightingStyle" TargetType="{x:Type ListViewItem}">
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Source}"
+                                             Value="Local">
+                                        <Setter Property="Background" Value="Gold"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+        </Window.Resources>
         <Grid>
                 <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -26,7 +37,7 @@
                                         Search
                                 </Button>
                         </Grid>
-                        <TreeView Name="treeView"  VerticalAlignment="Stretch">
+                        <TreeView Name="treeView" SelectedItemChanged="TreeView_OnSelectedItemChanged"  VerticalAlignment="Stretch">
                                 
                         </TreeView>
                 </DockPanel>
@@ -42,7 +53,46 @@
                                 <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TabControl Margin="0,8,10,3">
-                                <TabItem Header="Propertis" />
+                                <TabItem Header="Propertis" >
+                                        <ListView  Name="box" ItemContainerStyle="{StaticResource ItemHighlightingStyle}">
+                                                <ListView.View>
+                                                        <GridView>
+                                                                <GridView.Columns>
+                                                                        <GridViewColumn>
+                                                                                <GridViewColumn.CellTemplate>
+                                                                                        <DataTemplate>
+                                                                                                <TextBlock Text="{Binding Name}"/>
+                                                                                        </DataTemplate>
+                                                                                </GridViewColumn.CellTemplate>
+                                                                                <GridViewColumn.Header>
+                                                                                        <TextBlock Text="Name"/>
+                                                                                </GridViewColumn.Header>
+                                                                        </GridViewColumn>
+                                                                        <GridViewColumn>
+                                                                                <GridViewColumn.CellTemplate>
+                                                                                        <DataTemplate>
+                                                                                                <TextBlock Text="{Binding Value}"/>
+                                                                                        </DataTemplate>
+                                                                                </GridViewColumn.CellTemplate>
+                                                                                <GridViewColumn.Header>
+                                                                                        <TextBlock Text="Value"/>
+                                                                                </GridViewColumn.Header>
+                                                                        </GridViewColumn>
+                                                                        <GridViewColumn>
+                                                                                <GridViewColumn.CellTemplate>
+                                                                                        <DataTemplate>
+                                                                                                <TextBlock Text="{Binding Source}"/>
+                                                                                        </DataTemplate>
+                                                                                </GridViewColumn.CellTemplate>
+                                                                                <GridViewColumn.Header>
+                                                                                        <TextBlock Text="Source"/>
+                                                                                </GridViewColumn.Header>
+                                                                        </GridViewColumn>
+                                                                </GridView.Columns>
+                                                        </GridView>
+                                                </ListView.View>
+                                        </ListView>
+                                </TabItem>
                                 <TabItem Header="Data Context" />
                                 <TabItem Header="Events" />
                                 <TabItem Header="Methods" />

@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup.Primitives;
 using System.Windows.Media;
+using Control = System.Windows.Controls.Control;
 
 namespace LearnXAML {
     /// <summary>
@@ -69,6 +72,30 @@ namespace LearnXAML {
         protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
             ResearchWindow?.Close();
+        }
+
+        private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            var markupObject = MarkupWriter.GetMarkupObjectFor(sender);
+            if (markupObject == null) return;
+            
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(sender,
+                         new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
+            {
+                DependencyPropertyDescriptor dpd =
+                    DependencyPropertyDescriptor.FromProperty(pd);
+
+                if (dpd != null)
+                {
+                    box.Items.Add(new ItemOfProperty() {
+                        Name = dpd.Name,
+                        Value = GetValue(dpd.DependencyProperty),
+                        Source = DependencyPropertyHelper.GetValueSource(sender as DependencyObject,dpd.DependencyProperty)
+                            .BaseValueSource.ToString()
+                    });
+                }
+            }
+
+            box.Items.Refresh();
         }
     }
 }
