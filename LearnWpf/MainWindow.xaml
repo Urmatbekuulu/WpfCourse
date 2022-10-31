@@ -6,7 +6,22 @@
         xmlns:local="clr-namespace:LearnXAML"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        <Window.DataContext>
+                <local:MainViewModel />
+        </Window.DataContext>
+        <Window.Resources>
+                <local:DebugConverter x:Key="debugger"/>
+        </Window.Resources>
+        <DockPanel local:Helper.ParentDataContext="{Binding}">
+                <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                        <StackPanel>
+                                                <TextBlock Text="{Binding (local:Helper.ParentDataContext).Property2
+                                                 ,RelativeSource={RelativeSource Self}}" />
+                                        </StackPanel>
+                                </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                </ItemsControl>
+        </DockPanel>
 </Window>
