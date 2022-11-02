@@ -75,27 +75,28 @@ namespace LearnXAML {
         }
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-            var markupObject = MarkupWriter.GetMarkupObjectFor(sender);
-            if (markupObject == null) return;
             
-            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(sender,
-                         new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
-            {
-                DependencyPropertyDescriptor dpd =
+            var element = (e.NewValue as TreeViewItem).Tag as DependencyObject;
+            if(element is null) return;
+            
+            box.Items.Clear();
+            var properties = TypeDescriptor.GetProperties(element,
+                new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) });
+            
+            foreach (PropertyDescriptor pd in properties.Sort())
+            { DependencyPropertyDescriptor dpd =
                     DependencyPropertyDescriptor.FromProperty(pd);
 
                 if (dpd != null)
                 {
                     box.Items.Add(new ItemOfProperty() {
                         Name = dpd.Name,
-                        Value = GetValue(dpd.DependencyProperty),
-                        Source = DependencyPropertyHelper.GetValueSource(sender as DependencyObject,dpd.DependencyProperty)
+                        Value = element.GetValue(dpd.DependencyProperty),
+                        Source = DependencyPropertyHelper.GetValueSource(element,dpd.DependencyProperty)
                             .BaseValueSource.ToString()
                     });
                 }
             }
-
-            box.Items.Refresh();
         }
     }
 }
