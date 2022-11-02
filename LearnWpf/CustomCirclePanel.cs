@@ -4,15 +4,15 @@ using System.Windows.Controls;
 
 namespace LearnXAML; 
 
-public class CircleCustomPanel:Panel {
+public class CustomCirclePanel:Panel {
     public static readonly DependencyProperty RadiusProperty = DependencyProperty.Register(
-        nameof(Radius), typeof(double), typeof(CircleCustomPanel), new PropertyMetadata(default(double)));
+        nameof(Radius), typeof(double), typeof(CustomCirclePanel), new PropertyMetadata(default(double)));
 
     public double Radius {
         get { return (double)GetValue(RadiusProperty); }
         set { SetValue(RadiusProperty, value); }
     }
-    public CircleCustomPanel():base() {
+    public CustomCirclePanel():base() {
         
     }
     protected override Size MeasureOverride(Size availableSize) {
