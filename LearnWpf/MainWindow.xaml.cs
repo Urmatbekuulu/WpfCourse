@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Color = System.Drawing.Color;
 
 namespace LearnXAML {
     /// <summary>
@@ -20,6 +11,20 @@ namespace LearnXAML {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+            TrafficControl.ChangeColorOfTraffic();
+        }
+        private void TrafficControl_OnColorChangedEvent(object? sender, CustomTrafficControl.TrafficEventArgs e) {
+            string oldColorName, newColorName;
+            foreach (KnownColor kc in Enum.GetValues(typeof(KnownColor)))
+            {
+                Color known = Color.FromKnownColor(kc);
+                if (known==e.OldColor ) oldColorName = known.Name;
+                if (known == e.NewColor) newColorName = known.Name;
+            }
+            MessageBox.Show($"Old color is {e.OldColor}\n New color is {e.NewColor}");
         }
     }
 }
