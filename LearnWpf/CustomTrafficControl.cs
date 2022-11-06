@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
-using Color = System.Drawing.Color;
+using Color = System.Windows.Media.Color;
 
 namespace LearnXAML
 {
@@ -42,10 +42,7 @@ namespace LearnXAML
         private DispatcherTimer _dispatcherTimer = new DispatcherTimer();
         
         private Color[] _colorsArray ={
-            Color.FromKnownColor(KnownColor.Red)
-            ,Color.FromKnownColor(KnownColor.Yellow)
-            ,Color.FromKnownColor(KnownColor.Green)
-            ,Color.FromKnownColor(KnownColor.Yellow)
+            Colors.Red,Colors.Yellow,Colors.Green,Colors.Yellow
         };
         private int _currentColorIndex = 0;
         
@@ -53,21 +50,46 @@ namespace LearnXAML
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTrafficControl), new FrameworkPropertyMetadata(typeof(CustomTrafficControl)));
         }
-       
-        protected override void OnInitialized(EventArgs e) {
+       protected override void OnInitialized(EventArgs e) {
             base.OnInitialized(e);
+            if(IntervalSecond<=0) return;
+            _dispatcherTimer.Interval = TimeSpan.FromSeconds(IntervalSecond);
             _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.Interval = new TimeSpan(0,0,3);
             _dispatcherTimer.Start();
-        }
+       }
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             ChangeColorOfTraffic();
         }
 
-        public static readonly DependencyProperty TrafficColorProperty = DependencyProperty.Register(
-            nameof(TrafficColor), typeof(Color), typeof(CustomTrafficControl), new PropertyMetadata( Color.FromKnownColor(KnownColor.Red)));
+        public static readonly DependencyProperty IntervalSecondProperty = DependencyProperty.Register(
+            nameof(IntervalSecond), typeof(int), typeof(CustomTrafficControl), new PropertyMetadata(default(int)));
 
+        public int IntervalSecond {
+            get { return (int)GetValue(IntervalSecondProperty); }
+            set { SetValue(IntervalSecondProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsTwoCellModeProperty = DependencyProperty.Register(
+            nameof(IsTwoCellMode), typeof(bool), typeof(CustomTrafficControl), new PropertyMetadata(default(bool)));
+
+        public bool IsTwoCellMode {
+            get { return (bool)GetValue(IsTwoCellModeProperty); }
+            set { SetValue(IsTwoCellModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty TrafficColorProperty = DependencyProperty.Register(
+            nameof(TrafficColor), typeof(Color), typeof(CustomTrafficControl), new PropertyMetadata( Colors.Red, new PropertyChangedCallback(TrafficColorChangedCallback)));
+
+        private static void TrafficColorChangedCallback(DependencyObject dpo,DependencyPropertyChangedEventArgs args) {
+            var trafficControl = dpo as CustomTrafficControl;
+            if(trafficControl is null) return;
+            trafficControl.ColorChangedEvent.Invoke(trafficControl,new TrafficEventArgs() {
+                NewColor = args.OldValue,
+                OldColor = args.NewValue
+            });
+            
+        }
         public Color TrafficColor {
             get { return (Color)GetValue(TrafficColorProperty); }
             set { SetValue(TrafficColorProperty, value); }
@@ -80,19 +102,16 @@ namespace LearnXAML
             set { SetValue(CellStyleProperty, value); }
         }
 
-
-        public void ChangeColorOfTraffic(){
-            _currentColorIndex++;
+      public void ChangeColorOfTraffic(){
+          var step = IsTwoCellMode?2:1;
+            _currentColorIndex+=step;
             if (_currentColorIndex == _colorsArray.Length) _currentColorIndex = 0;
             TrafficColor = _colorsArray[_currentColorIndex];
-            ColorChangedEvent?.Invoke(this,new TrafficEventArgs() {
-                OldColor = _colorsArray[_currentColorIndex-1<0?0:_currentColorIndex-1],
-                NewColor = _colorsArray[_currentColorIndex]
-            });
+           
         }
         public class TrafficEventArgs:EventArgs {
-            public Color OldColor { get; set; }
-            public Color NewColor { get; set; }
+            public object OldColor { get; set; }
+            public object NewColor { get; set; }
             
         }
     }
