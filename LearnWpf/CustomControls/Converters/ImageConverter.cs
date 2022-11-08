@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace LearnXAML.Themes.Converters; 
+namespace LearnXAML.CustomControls.Converters; 
 
-public class ColorToBrushConverter:IValueConverter {
+public class ImageConverter:IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-        return new SolidColorBrush((Color)value);
+        return value == null;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

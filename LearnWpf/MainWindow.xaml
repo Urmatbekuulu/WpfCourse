@@ -4,73 +4,71 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
+        xmlns:customControls="clr-namespace:LearnXAML.CustomControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <UniformGrid Rows="1">
         <StackPanel>
-            <local:CustomTrafficControl x:Name="TrafficControl" ColorChangedEvent="TrafficControl_OnColorChangedEvent"
+            <customControls:CustomTraffic ColorChangedEvent="TrafficControl_OnColorChangedEvent"
                                         IntervalSecond="2">
-                <local:CustomTrafficControl.CellStyle>
-                    <Style TargetType="local:Cell">
+                <customControls:CustomTraffic.CellStyle>
+                    <Style TargetType="customControls:Cell">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Red">
                                 <Setter Property="Image"
                                         Value="Resources/ImageRed.png" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Yellow">
                                 <Setter Property="Image"
                                         Value="Resources/ImageYellow.png" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Green">
                                 <Setter Property="Image"
                                         Value="Resources/ImageGreen.png" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </local:CustomTrafficControl.CellStyle>
-            </local:CustomTrafficControl>
-            <Button Content="Change Color" Click="ButtonBase_OnClick" />
+                </customControls:CustomTraffic.CellStyle>
+            </customControls:CustomTraffic>
         </StackPanel>
         <StackPanel>
-            <local:CustomTrafficControl x:Name="TrafficControl2" ColorChangedEvent="TrafficControl_OnColorChangedEvent"
+            <customControls:CustomTraffic ColorChangedEvent="TrafficControl_OnColorChangedEvent"
                                         IntervalSecond="1"/>
-            <Button Content="Change Color" Click="ButtonBase_OnClick2" />
         </StackPanel>
         <StackPanel>
-            <local:CustomTrafficControl x:Name="TrafficControl3" ColorChangedEvent="TrafficControl_OnColorChangedEvent"
+            <customControls:CustomTraffic ColorChangedEvent="TrafficControl_OnColorChangedEvent"
+                                          IntervalSecond="3"
                                         IsTwoCellMode="True">
-            </local:CustomTrafficControl>
-            <Button Content="Change Color" Click="ButtonBase_OnClick3" />
+            </customControls:CustomTraffic>
         </StackPanel>
         <StackPanel>
-            <local:CustomTrafficControl x:Name="TrafficControl4" ColorChangedEvent="TrafficControl_OnColorChangedEvent"
+            <customControls:CustomTraffic ColorChangedEvent="TrafficControl_OnColorChangedEvent"
                                         IsTwoCellMode="True">
-                <local:CustomTrafficControl.CellStyle>
-                    <Style TargetType="local:Cell">
+                <customControls:CustomTraffic.CellStyle>
+                    <Style TargetType="customControls:Cell">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Red">
                                 <Setter Property="Image"
                                         Value="Resources/ImageRed.png" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Yellow">
                                 <Setter Property="Image"
                                         Value="Resources/ImageYellow.png" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=CurrentColor}"
+                            <DataTrigger Binding ="{Binding CellColor}"
                                          Value="Green">
                                 <Setter Property="Image"
                                         Value="Resources/ImageGreen.png" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </local:CustomTrafficControl.CellStyle>
-            </local:CustomTrafficControl>
-            <Button Content="Change Color" Click="ButtonBase_OnClick4" />
+                </customControls:CustomTraffic.CellStyle>
+            </customControls:CustomTraffic>
         </StackPanel>
     </UniformGrid>
 </Window>

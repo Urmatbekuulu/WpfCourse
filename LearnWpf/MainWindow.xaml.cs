@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
+using LearnXAML.CustomControls;
 using Color = System.Drawing.Color;
 
 namespace LearnXAML {
@@ -14,9 +15,9 @@ namespace LearnXAML {
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
-            TrafficControl.ChangeColorOfTraffic();
+            
         }
-        private void TrafficControl_OnColorChangedEvent(object? sender, CustomTrafficControl.TrafficEventArgs e) {
+        private void TrafficControl_OnColorChangedEvent(object? sender, CustomTraffic.TrafficEventArgs e) {
             string oldColorName ="", newColorName = "";
             foreach (KnownColor kc in Enum.GetValues(typeof(KnownColor)))
             {
@@ -30,16 +31,6 @@ namespace LearnXAML {
             //MessageBox.Show($"Old color is {oldColorName}\n New color is {newColorName}");
         }
 
-        private void ButtonBase_OnClick4(object sender, RoutedEventArgs e) {
-            TrafficControl4.ChangeColorOfTraffic();
-        }
-
-        private void ButtonBase_OnClick3(object sender, RoutedEventArgs e) {
-            TrafficControl3.ChangeColorOfTraffic();
-        }
-
-        private void ButtonBase_OnClick2(object sender, RoutedEventArgs e) {
-            TrafficControl2.ChangeColorOfTraffic();
-        }
+       
     }
 }

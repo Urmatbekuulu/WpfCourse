@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace LearnXAML.Themes.Converters; 
+namespace LearnXAML.CustomControls.Converters; 
 
-public class BoolToEnumConverter:IValueConverter {
+public class DebugConverter:IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-        if ((bool)value) return Visibility.Collapsed;
-        return Visibility.Visible;
+        return value;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

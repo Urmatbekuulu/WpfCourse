@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Threading;
+using LearnXAML.CustomControls.ViewModels;
 using Color = System.Windows.Media.Color;
 
-namespace LearnXAML
+namespace LearnXAML.CustomControls
 {
     /// <summary>
     /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
@@ -36,34 +37,35 @@ namespace LearnXAML
     ///     <MyNamespace:CustomControl1/>
     ///
     /// </summary>
-    public class CustomTrafficControl : Control {
+    public class CustomTraffic : Control {
         
         public event EventHandler<TrafficEventArgs> ColorChangedEvent;
-        private DispatcherTimer _dispatcherTimer = new DispatcherTimer();
-        
-        private Color[] _colorsArray ={
-            Colors.Red,Colors.Yellow,Colors.Green,Colors.Yellow
-        };
-        private int _currentColorIndex = 0;
-        
-        static CustomTrafficControl()
+        static CustomTraffic()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTrafficControl), new FrameworkPropertyMetadata(typeof(CustomTrafficControl)));
-        }
-       protected override void OnInitialized(EventArgs e) {
-            base.OnInitialized(e);
-            if(IntervalSecond<=0) return;
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(IntervalSecond);
-            _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.Start();
-       }
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            ChangeColorOfTraffic();
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTraffic), new FrameworkPropertyMetadata(typeof(CustomTraffic)));
         }
 
+        public CustomTraffic() {
+            
+            DataContext = new CustomTrafficViewModel();
+            
+            Binding timeBinding = new Binding(nameof(IntervalSecond));
+            timeBinding.Source = this.DataContext;
+            timeBinding.Mode = BindingMode.OneWayToSource;
+            this.SetBinding(IntervalSecondProperty, timeBinding);
+            
+            Binding colorBinding = new Binding(nameof(TrafficColor));
+            colorBinding.Source = this.DataContext;
+            colorBinding.Mode = BindingMode.OneWay;
+            this.SetBinding(TrafficColorProperty, colorBinding);
+
+            Binding modeBinding = new Binding(nameof(IsTwoCellMode));
+            modeBinding.Mode = BindingMode.OneWayToSource;
+            this.SetBinding(IsTwoCellModeProperty, modeBinding);
+        }
+  
         public static readonly DependencyProperty IntervalSecondProperty = DependencyProperty.Register(
-            nameof(IntervalSecond), typeof(int), typeof(CustomTrafficControl), new PropertyMetadata(default(int)));
+            nameof(IntervalSecond), typeof(int), typeof(CustomTraffic), new PropertyMetadata(default(int)));
 
         public int IntervalSecond {
             get { return (int)GetValue(IntervalSecondProperty); }
@@ -71,7 +73,7 @@ namespace LearnXAML
         }
 
         public static readonly DependencyProperty IsTwoCellModeProperty = DependencyProperty.Register(
-            nameof(IsTwoCellMode), typeof(bool), typeof(CustomTrafficControl), new PropertyMetadata(default(bool)));
+            nameof(IsTwoCellMode), typeof(bool), typeof(CustomTraffic), new PropertyMetadata(default(bool)));
 
         public bool IsTwoCellMode {
             get { return (bool)GetValue(IsTwoCellModeProperty); }
@@ -79,14 +81,14 @@ namespace LearnXAML
         }
 
         public static readonly DependencyProperty TrafficColorProperty = DependencyProperty.Register(
-            nameof(TrafficColor), typeof(Color), typeof(CustomTrafficControl), new PropertyMetadata( Colors.Red, new PropertyChangedCallback(TrafficColorChangedCallback)));
+            nameof(TrafficColor), typeof(Color), typeof(CustomTraffic), new PropertyMetadata( Colors.Red, new PropertyChangedCallback(TrafficColorChangedCallback)));
 
         private static void TrafficColorChangedCallback(DependencyObject dpo,DependencyPropertyChangedEventArgs args) {
-            var trafficControl = dpo as CustomTrafficControl;
+            var trafficControl = dpo as CustomTraffic;
             if(trafficControl is null) return;
             trafficControl.ColorChangedEvent.Invoke(trafficControl,new TrafficEventArgs() {
-                NewColor = args.OldValue,
-                OldColor = args.NewValue
+                NewColor = args.NewValue,
+                OldColor = args.OldValue
             });
             
         }
@@ -95,20 +97,14 @@ namespace LearnXAML
             set { SetValue(TrafficColorProperty, value); }
         }
         public static readonly DependencyProperty CellStyleProperty = DependencyProperty.Register(
-            nameof(CellStyle), typeof(Style), typeof(CustomTrafficControl), new PropertyMetadata(default(Style)));
+            nameof(CellStyle), typeof(Style), typeof(CustomTraffic), new PropertyMetadata(default(Style)));
 
         public Style CellStyle {
             get { return (Style)GetValue(CellStyleProperty); }
             set { SetValue(CellStyleProperty, value); }
         }
 
-      public void ChangeColorOfTraffic(){
-          var step = IsTwoCellMode?2:1;
-            _currentColorIndex+=step;
-            if (_currentColorIndex == _colorsArray.Length) _currentColorIndex = 0;
-            TrafficColor = _colorsArray[_currentColorIndex];
-           
-        }
+   
         public class TrafficEventArgs:EventArgs {
             public object OldColor { get; set; }
             public object NewColor { get; set; }

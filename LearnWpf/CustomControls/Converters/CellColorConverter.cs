@@ -3,8 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-
-namespace LearnXAML.Themes.Converters; 
+namespace LearnXAML.CustomControls.Converters; 
 
 public class CellColorConverter :IValueConverter{
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
