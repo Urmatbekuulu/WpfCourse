@@ -4,20 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearnXAML"
+        xmlns:vm="clr-namespace:LearnXAML.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+>
     <Window.Resources>
-        <Style TargetType="ListBoxItem">
-        </Style>
-        <local:DebugConverter x:Key="DebugConverter"/>
         <local:AgeToColorConverter x:Key="AgeToColorConverter"/>
+        <vm:PersonViewModel x:Key="PersonViewModel" />
     </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource PersonViewModel}"/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Path=People}" Name="listBox">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Name="listBox" ItemsSource="{Binding Path=People}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Focusable="True">
@@ -47,10 +54,26 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <UniformGrid Grid.Row="1" Rows="1">
+        <UniformGrid Grid.Row="1" Grid.Column="0" Rows="1">
             <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.LastName, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox Text="{Binding ElementName = listBox, Path =SelectedItem.Age, UpdateSourceTrigger=PropertyChanged}"/>
         </UniformGrid>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="First Name" Width="100"/>
+                <TextBox Width="100" Text="{Binding Person.FirstName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="LastName" Width="100"/>
+                <TextBox Width="100" Text="{Binding Person.LastName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Age" Width="100"/>
+                <TextBox Width="100" Text="{Binding Person.Age,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <Button Width="150" HorizontalAlignment="Center" Content="Add Person" Command="{Binding AddCommand}"/>
+            <Button Width="150" HorizontalAlignment="Center" Content="Remove Selected Item" Command="{Binding RemoveCommand}" CommandParameter="{Binding ElementName=listBox, Path=SelectedIndex }"/>
+        </StackPanel>
     </Grid> 
 </Window>
